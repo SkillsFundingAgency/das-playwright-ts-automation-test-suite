@@ -14,15 +14,27 @@ export const test = base.extend<EmpAccountLoginFixtures>({
     const auth = JSON.parse(process.env.LiveEasUser!);
 
     await page.goto('https://accounts.manage-apprenticeships.service.gov.uk');
+    await expect(page).toHaveURL('https://accounts.manage-apprenticeships.service.gov.uk');
+    await expect(page.getByRole('button', { name: 'Accept additional cookies' })).toBeVisible();
+
     await page.getByRole('button', { name: 'Accept additional cookies' }).click();
     await page.getByRole('button', { name: 'Sign in' }).click();
     await page.getByRole('button', { name: 'Sign in' }).click();
+    await expect(page).toHaveURL('https://signin.account.gov.uk/');
+    await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
+
     await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
     await page.getByRole('textbox', { name: 'Enter your email address to' }).fill(auth.Username);
     await page.getByRole('button', { name: 'Continue' }).click();
+    await expect(page).toHaveURL('https://signin.account.gov.uk/enter-password');
+    await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
+
     await page.getByRole('textbox', { name: 'Enter your password' }).click();
     await page.getByRole('textbox', { name: 'Enter your password' }).fill(auth.Password);
     await page.getByRole('button', { name: 'Continue' }).click();
+    await expect(page).toHaveURL('https://signin.account.gov.uk/enter-authenticator-app-code');
+    await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
+
     const mfaCode = await getMfaCode();
     await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
     await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
