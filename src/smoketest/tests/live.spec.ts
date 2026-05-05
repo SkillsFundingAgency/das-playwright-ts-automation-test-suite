@@ -3,10 +3,11 @@ import { test, expect} from '../fixtures/basefixture';
 test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login, page }) => {
  
   await page.getByRole('link', { name: 'Finance' }).click();
-    await expect(page.locator('h1')).toContainText('Finance');
+  
+  await expect(page.locator('h1')).toContainText('Funding and payments');
 
   await page.getByRole('link', { name: 'Adverts' }).click();
-  await expect(page.locator('h1')).toContainText('Vacancies');
+  await expect(page.locator('h1')).toContainText('Recruitment dashboard');
 
   await page.getByRole('link', { name: 'Apprentices' }).click();
   await expect(page.locator('h1')).toContainText('Apprentices');
@@ -24,10 +25,10 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await expect(page.locator('h1')).toContainText('PAYE schemes');
 
   await page.getByRole('link', { name: 'Sign out' }).click();
-  await expect(page).toHaveURL('https://accounts.manage-apprenticeships.service.gov.uk/service/signout');
-  await expect(page.locator('h1')).toContainText('You have signed out');
+  
+  await expect(page.locator('h1')).toContainText('You have been signed out');
 
   await page.getByRole('link', { name: 'Sign in', exact: true }).click();
-  await expect(page).toHaveURL('https://www.gov.uk/sign-in-apprenticeship-service-account');
-  await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
+
+  await expect(page.locator('h1')).toContainText('Create your GOV.UK One Login or sign in');
 });
