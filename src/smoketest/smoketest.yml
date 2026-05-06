@@ -6,34 +6,44 @@ pool:
 
 variables:
   NODE_VERSION: '18.x'
+  WORKING_DIRECTORY: 'src/smoketest'
 
 steps:
   - checkout: self
 
   # ✅ Install Node.js
-  - task: NodeTool@0
+  - task: UseNode@1
     inputs:
       versionSpec: $(NODE_VERSION)
     displayName: 'Install Node.js'
 
+  # ✅ Debug: Check current working directory
   - script: |
       pwd
       ls -la
     displayName: 'Debug: List files in the current directory'
+  
+  # ✅ Debug working directory folder
+  - script: |
+      ls -la $(WORKING_DIRECTORY)
+    displayName: 'Check smoketest folder'
 
   # ✅ Install dependencies
   - script: |
       npm ci
+    workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Install dependencies'
 
   # ✅ Install Playwright browsers and dependencies
   - script: |
       npx playwright install --with-deps
+    workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Install Playwright browsers'
 
   # ✅ Run Playwright tests
   - script: |
       npx playwright test
+    workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Run Playwright tests'
     env:
       LiveEasUser: $(LiveEasUser)
@@ -45,7 +55,7 @@ steps:
     condition: always()
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: 'results.xml'
+      testResultsFiles: '$(WORKING_DIRECTORY)/results.xml'
       failTaskOnFailedTests: true
       testRunTitle: 'Playwright Test Results'
 
@@ -54,6 +64,6 @@ steps:
     displayName: 'Publish Playwright HTML Report'
     condition: always()
     inputs:
-      pathToPublish: 'playwright-report'
+      pathToPublish: '$(WORKING_DIRECTORY)/playwright-report'
       artifactName: 'playwright-report'
       publishLocation: 'Container'
