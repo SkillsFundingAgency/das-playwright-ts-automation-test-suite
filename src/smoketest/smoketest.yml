@@ -19,17 +19,22 @@ steps:
 
   # ✅ Debug: Check current working directory
   - script: |
+      echo "Current directory:"
       pwd
+      echo "Contents:"
       ls -la
-    displayName: 'Debug: List files in the current directory'
+    displayName: 'Debug: Current directory file list'
   
   # ✅ Debug working directory folder
   - script: |
+      echo "Working directory contents:"
       ls -la $(WORKING_DIRECTORY)
-    displayName: 'Check smoketest folder'
+    displayName: 'Debug: working directory file list'
 
   # ✅ Install dependencies
   - script: |
+      echo "Working directory path:"
+      echo $(WORKING_DIRECTORY)
       npm ci
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Install dependencies'
