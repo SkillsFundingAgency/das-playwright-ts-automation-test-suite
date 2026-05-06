@@ -1,0 +1,52 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  NODE_VERSION: '18.x'
+
+steps:
+  # ✅ Install Node.js
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'Install Node.js'
+
+  # ✅ Install dependencies
+  - script: |
+      npm ci
+    displayName: 'Install dependencies'
+
+  # ✅ Install Playwright browsers and dependencies
+  - script: |
+      npx playwright install --with-deps
+    displayName: 'Install Playwright browsers'
+
+  # ✅ Run Playwright tests
+  - script: |
+      npx playwright test
+    displayName: 'Run Playwright tests'
+    env:
+      LiveEasUser: $(LiveEasUser)
+      MailasourDeviceConfig: $(MailasourDeviceConfig)
+
+  # ✅ Publish JUnit Test Results to Azure DevOps UI
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    condition: always()
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'results.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: 'Playwright Test Results'
+
+  # ✅ Publish Playwright HTML report as artifact
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Playwright HTML Report'
+    condition: always()
+    inputs:
+      pathToPublish: 'playwright-report'
+      artifactName: 'playwright-report'
+      publishLocation: 'Container'
