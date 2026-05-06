@@ -8,11 +8,18 @@ variables:
   NODE_VERSION: '18.x'
 
 steps:
+  - checkout: self
+
   # ✅ Install Node.js
   - task: NodeTool@0
     inputs:
       versionSpec: $(NODE_VERSION)
     displayName: 'Install Node.js'
+
+  - script: |
+      pwd
+      ls -la
+    displayName: 'Debug: List files in the current directory'
 
   # ✅ Install dependencies
   - script: |
