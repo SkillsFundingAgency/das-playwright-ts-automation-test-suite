@@ -5,7 +5,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  NODE_VERSION: '20.x'
   WORKING_DIRECTORY: 'src/smoketest'
 
 steps:
@@ -14,8 +13,16 @@ steps:
   # ✅ Install Node.js
   - task: UseNode@1
     inputs:
-      versionSpec: $(NODE_VERSION)
+      version: 24.x
     displayName: 'Install Node.js'
+
+  # ✅ Debug: Check installed node and npm version
+  - script: |
+      echo "Node version:"
+      node -v
+      echo "Npm version:"
+      npm -v
+    displayName: 'Debug: Check installed node and npm version'
 
   # ✅ Debug: Check current working directory
   - script: |
@@ -29,7 +36,7 @@ steps:
   - script: |
       echo "Working directory contents:"
       ls -la $(WORKING_DIRECTORY)
-    displayName: 'Debug: working directory file list'
+    displayName: 'Debug: Working directory file list'
 
   # ✅ Update npm 
   - script: |
