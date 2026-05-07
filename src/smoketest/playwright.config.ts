@@ -1,8 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.smoketest' });
 
+// Load env only for local runs
+if (!process.env.CI) {
+  require('dotenv').config({ path: '.env.smoketest' });
+}
 
 
 /**
