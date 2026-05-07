@@ -1,4 +1,4 @@
-import { test as base, expect, Page } from '@playwright/test';
+import { test as base, expect, Locator, Page } from '@playwright/test';
 import Mailosaur, { OtpResult } from 'mailosaur';
 
 // Define the types for our custom fixtures
@@ -20,18 +20,18 @@ export const test = base.extend<EmpAccountLoginFixtures>({
     await page.getByRole('button', { name: 'Accept additional cookies' }).click();
     await page.getByRole('button', { name: 'Sign in' }).click();
     await page.getByRole('button', { name: 'Sign in' }).click();
+
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
     await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
-
     await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
-    await page.getByRole('textbox', { name: 'Enter your email address to' }).fill(auth.Username);
+    await fillMasked(page, '#email', auth.Username);
     await page.getByRole('button', { name: 'Continue' }).click();
+
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
     await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
-
-    await page.getByRole('textbox', { name: 'Enter your password' }).click();
-    await page.getByRole('textbox', { name: 'Enter your password' }).fill(auth.Password);
+    await fillMasked(page, '#password', auth.Password);
     await page.getByRole('button', { name: 'Continue' }).click();
+
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
     await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
 
@@ -44,6 +44,24 @@ export const test = base.extend<EmpAccountLoginFixtures>({
     await use();
   },
 });
+
+export async function fillMasked(page: Page, selector: string, value: string) {
+  await test.step(`Fill ${selector} (masked)`, async () => {
+    await page.evaluate(
+      ({ selector, value }) => {
+        const el = document.querySelector(selector) as HTMLInputElement;
+        if (el) {
+          el.type = 'password';
+          el.value = value;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      },
+      { selector, value }
+    );
+  });
+}
+
+
 
 
 export async function getMfaCode(): Promise<string> {
