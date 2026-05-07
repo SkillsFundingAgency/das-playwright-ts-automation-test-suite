@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '20.x'
   WORKING_DIRECTORY: 'src/smoketest'
 
 steps:
@@ -31,11 +31,17 @@ steps:
       ls -la $(WORKING_DIRECTORY)
     displayName: 'Debug: working directory file list'
 
+  # ✅ Update npm 
+  - script: |
+      npm install -g npm@latest
+      npm --version
+    displayName: 'Upgrade npm'
+
   # ✅ Install dependencies
   - script: |
       echo "Working directory path:"
       echo $(WORKING_DIRECTORY)
-      npm ci
+      npm install
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Install dependencies'
 
