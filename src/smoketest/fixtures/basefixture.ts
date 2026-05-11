@@ -1,4 +1,4 @@
-import { test as base, expect, Locator, Page } from '@playwright/test';
+import { test as base, expect, BrowserContext, Page } from '@playwright/test';
 import Mailosaur, { OtpResult } from 'mailosaur';
 
 // Define the types for our custom fixtures
@@ -13,6 +13,10 @@ export const test = base.extend<EmpAccountLoginFixtures>({
 
     const auth = JSON.parse(process.env.LiveEasUser!);
 
+    await injectSecret(page.context(), '__email', auth.Username);
+
+    await injectSecret(page.context(), '__password', auth.Password);
+
     await page.goto('https://accounts.manage-apprenticeships.service.gov.uk');
     await expect(page).toHaveURL(/https:\/\/(accounts\.manage-apprenticeships\.service\.gov\.uk|www\.gov\.uk\/sign-in-apprenticeship-service-account)/);
     await expect(page.getByRole('button', { name: 'Accept additional cookies' })).toBeVisible();
@@ -24,12 +28,13 @@ export const test = base.extend<EmpAccountLoginFixtures>({
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
     await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
-    await fillMasked(page, '#email', auth.Username);
+    
+    await secureFill(page, '#email', '__email');
     await page.getByRole('button', { name: 'Continue' }).click();
 
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
     await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
-    await fillMasked(page, '#password', auth.Password);
+    await secureFill(page, '#password', '__password');
     await page.getByRole('button', { name: 'Continue' }).click();
 
     await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
@@ -45,24 +50,23 @@ export const test = base.extend<EmpAccountLoginFixtures>({
   },
 });
 
-export async function fillMasked(page: Page, selector: string, value: string) {
-  await test.step(`Fill ${selector} (masked)`, async () => {
-    await page.evaluate(
-      ({ selector, value }) => {
-        const el = document.querySelector(selector) as HTMLInputElement;
-        if (el) {
-          el.type = 'password';
-          el.value = value;
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-      },
-      { selector, value }
-    );
-  });
+
+export async function injectSecret(context: BrowserContext, key: string, value: string) {
+  await context.addInitScript(([k, v]) => {
+    (window as any)[k] = v;
+  }, [key, value]);
 }
 
-
-
+export async function secureFill(page: Page, selector: string, key: string) {
+  await page.evaluate(([selector, key]) => {
+    const el = document.querySelector(selector) as HTMLInputElement;
+    if (el) {
+      el.type = 'password';
+      el.value = (window as any)[key];
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }, [selector, key]);
+}
 
 export async function getMfaCode(): Promise<string> {
 
@@ -83,6 +87,5 @@ export async function getMfaCode(): Promise<string> {
 
   return otp.code; // always a valid 6‑digit TOTP
 }
-
 
 export { expect } from '@playwright/test';
