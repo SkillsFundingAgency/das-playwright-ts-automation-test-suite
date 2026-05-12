@@ -27,6 +27,7 @@ for (const key of requiredEnvVars) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  testIgnore: '**/example.spec.ts',
   testDir: './tests',
   timeout: 60_000,
   /* Run tests in files in parallel */
