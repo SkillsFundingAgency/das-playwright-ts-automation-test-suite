@@ -78,6 +78,7 @@ steps:
   # ✅ Publish JUnit Test Results to Azure DevOps UI
   - task: PublishTestResults@2
     displayName: 'Test Tab: Publish Test Results'
+    continueOnError: true
     condition: always()
     inputs:
       testResultsFormat: 'JUnit'
