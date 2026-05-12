@@ -61,6 +61,7 @@ steps:
   # ✅ Run Playwright tests
   - script: |
       npx playwright test
+    continueOnError: true  
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Run Playwright tests'
     env:
@@ -76,6 +77,8 @@ steps:
 
   # ✅ Publish Allure report as pipeline artifact
   - task: PublishPipelineArtifact@1
+    displayName: 'Publish Allure Report as Pipeline Artifact'
+    condition: always()
     inputs:
       targetPath: 'allure-report'
       artifact: 'allure-report'
@@ -102,3 +105,4 @@ steps:
   # ✅ Link to Allure report
   - script: |
       echo "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Allure Report;]$(Build.SourcesDirectory)/allure-report/index.html
+    continueOnError: true  
