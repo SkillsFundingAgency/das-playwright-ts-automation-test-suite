@@ -65,6 +65,7 @@ steps:
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Run Playwright tests'
     env:
+      CI: 'true'
       LiveEasUser: $(LiveEasUser)
       MailasourDeviceConfig: $(MailasourDeviceConfig)
 
