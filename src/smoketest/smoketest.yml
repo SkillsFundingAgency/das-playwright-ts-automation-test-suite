@@ -70,39 +70,17 @@ steps:
 
   # ✅ Publish Allure report
   - task: PublishAllureReport@2
-    displayName: 'Generate and Publish Allure Report'
+    displayName: 'Allure Tab: Generate and Publish Allure Report'
     condition: always()
     inputs:
       testResultsDir: '$(WORKING_DIRECTORY)/allure-results'
 
-  # ✅ Publish Allure report as pipeline artifact
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish Allure Report as Pipeline Artifact'
-    condition: always()
-    inputs:
-      targetPath: 'allure-report'
-      artifact: 'allure-report'
-
   # ✅ Publish JUnit Test Results to Azure DevOps UI
   - task: PublishTestResults@2
-    displayName: 'Publish Test Results'
+    displayName: 'Test Tab: Publish Test Results'
     condition: always()
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: '$(WORKING_DIRECTORY)/results.xml'
       failTaskOnFailedTests: true
       testRunTitle: 'Playwright Test Results'
-
-  # ✅ Publish Playwright HTML report as artifact
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Playwright HTML Report'
-    condition: always()
-    inputs:
-      pathToPublish: '$(WORKING_DIRECTORY)/playwright-report'
-      artifactName: 'playwright-report'
-      publishLocation: 'Container'
-
-  # ✅ Link to Allure report
-  - script: |
-      echo "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Allure Report;]$(Build.SourcesDirectory)/allure-report/index.html
-    continueOnError: true  
