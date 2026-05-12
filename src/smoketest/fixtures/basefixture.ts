@@ -17,36 +17,39 @@ export const test = base.extend<EmpAccountLoginFixtures>({
 
     await injectSecret(page.context(), '__password', auth.Password);
 
-    await page.goto('https://accounts.manage-apprenticeships.service.gov.uk');
-    await expect(page).toHaveURL(/https:\/\/(accounts\.manage-apprenticeships\.service\.gov\.uk|www\.gov\.uk\/sign-in-apprenticeship-service-account)/);
-    await expect(page.getByRole('button', { name: 'Accept additional cookies' })).toBeVisible();
+    await test.step('Login to the employer account application', async () => {
 
-    await page.getByRole('button', { name: 'Accept additional cookies' }).click();
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await page.getByRole('button', { name: 'Sign in' }).click();
+      await page.goto('https://accounts.manage-apprenticeships.service.gov.uk');
+      await expect(page).toHaveURL(/https:\/\/(accounts\.manage-apprenticeships\.service\.gov\.uk|www\.gov\.uk\/sign-in-apprenticeship-service-account)/);
+      await expect(page.getByRole('button', { name: 'Accept additional cookies' })).toBeVisible();
 
-    await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
-    await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
-    await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
-    
-    await secureFill(page, '#email', '__email');
-    await page.getByRole('button', { name: 'Continue' }).click();
+      await page.getByRole('button', { name: 'Accept additional cookies' }).click();
+      await page.getByRole('button', { name: 'Sign in' }).click();
+      await page.getByRole('button', { name: 'Sign in' }).click();
 
-    await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
-    await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
-    await secureFill(page, '#password', '__password');
-    await page.getByRole('button', { name: 'Continue' }).click();
+      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
+      await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
+      await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
+      
+      await secureFill(page, '#email', '__email');
+      await page.getByRole('button', { name: 'Continue' }).click();
 
-    await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
-    await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
+      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
+      await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
+      await secureFill(page, '#password', '__password');
+      await page.getByRole('button', { name: 'Continue' }).click();
 
-    const mfaCode = await getMfaCode();
-    await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
-    await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
-    await page.getByRole('button', { name: 'Continue' }).click();
-    await expect(page.locator('h1')).toContainText('Department for Education');
+      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
+      await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
 
-    await use();
+      const mfaCode = await getMfaCode();
+      await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
+      await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
+      await page.getByRole('button', { name: 'Continue' }).click();
+      await expect(page.locator('h1')).toContainText('Department for Education');
+
+      await use();
+    });
   },
 });
 

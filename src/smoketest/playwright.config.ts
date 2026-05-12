@@ -40,7 +40,10 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html'],
-    ['junit', { outputFile: 'results.xml' }]
+    ['junit', { outputFile: 'results.xml' }],   
+    ['list'], 
+    ['allure-playwright']
+
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -54,16 +57,23 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'Google Chrome',
       use: { ...devices['Desktop Chrome'] },
     },
-
+    {
+      name: 'Safari',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'Microsoft Edge',
+      use: { ...devices['Desktop Edge'] },
+    },
   ],
 
   /* Run your local dev server before starting the tests */
