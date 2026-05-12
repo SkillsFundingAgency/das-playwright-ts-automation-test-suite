@@ -67,14 +67,9 @@ steps:
       LiveEasUser: $(LiveEasUser)
       MailasourDeviceConfig: $(MailasourDeviceConfig)
 
-  # ✅ Generate Allure report
-  - script: |
-      npx allure generate allure-results --clean -o allure-report
-    displayName: Generate Allure report
-
   # ✅ Publish Allure report
-  - task: PublishAllureReport@1
-    displayName: 'Publish Allure Report'
+  - task: PublishAllureReport@2
+    displayName: 'Generate and Publish Allure Report'
     condition: always()
     inputs:
       testResultsDir: '$(WORKING_DIRECTORY)/allure-results'
