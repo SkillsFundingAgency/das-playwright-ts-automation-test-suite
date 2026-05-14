@@ -1,0 +1,85 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  WORKING_DIRECTORY: 'src/smoketest'
+
+steps:
+  - checkout: self
+
+  # ✅ Install Node.js
+  - task: UseNode@1
+    inputs:
+      version: 24.x
+    displayName: 'Install Node.js'
+
+  # ✅ Debug: Check installed node and npm version
+  - script: |
+      echo "Node version:"
+      node -v
+      echo "Npm version:"
+      npm -v
+    displayName: 'Debug: Check installed node and npm version'
+
+  # ✅ Debug: Check current working directory
+  - script: |
+      echo "Current directory:"
+      pwd
+      echo "Contents:"
+      ls -la
+    displayName: 'Debug: Current directory file list'
+  
+  # ✅ Debug working directory folder
+  - script: |
+      echo "Working directory contents:"
+      ls -la $(WORKING_DIRECTORY)
+    displayName: 'Debug: Working directory file list'
+
+  # ✅ Update npm 
+  - script: |
+      npm install -g npm@latest
+      npm --version
+    displayName: 'Upgrade npm'
+
+  # ✅ Install dependencies
+  - script: |
+      echo "Working directory path:"
+      echo $(WORKING_DIRECTORY)
+      npm install
+    workingDirectory: $(WORKING_DIRECTORY)
+    displayName: 'Install dependencies'
+
+  # ✅ Install Playwright browsers and dependencies
+  - script: |
+      npx playwright install --with-deps
+    workingDirectory: $(WORKING_DIRECTORY)
+    displayName: 'Install Playwright browsers'
+
+  # ✅ Run Playwright tests
+  - script: |
+      npx playwright test
+    continueOnError: true  
+    workingDirectory: $(WORKING_DIRECTORY)
+    displayName: 'Run Playwright tests'
+    env:
+      CI: 'true'
+      LiveEasUser: $(LiveEasUser)
+      MailasourDeviceConfig: $(MailasourDeviceConfig)
+
+  # ✅ Publish Allure report
+  - task: PublishAllureReport@2
+    displayName: 'Allure Tab: Generate and Publish Allure Report'
+    condition: always()
+    inputs:
+      testResultsDir: '$(WORKING_DIRECTORY)/allure-results'
+
+  # ✅ Publish JUnit Test Results to Azure DevOps UI
+  - task: PublishTestResults@2
+    displayName: 'Test Tab: Publish Test Results'
+    continueOnError: true
+    condition: always()
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(WORKING_DIRECTORY)/results.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: 'Playwright Test Results'
