@@ -1,6 +1,2 @@
-#Changes to the following files/folders require review from listed teams
-.github/CODEOWNERS      @SkillsFundingAgency/das-platform-engineering
-/azure/                 @SkillsFundingAgency/das-platform-engineering
-azure-pipelines.yml     @SkillsFundingAgency/das-platform-engineering
-/pipeline-templates/    @SkillsFundingAgency/das-platform-engineering
-GitVersion.yml          @SkillsFundingAgency/das-platform-engineering
+# Assign the following as codeowners for this repository
+*      @arvinthseran @Najamuddin-Muhammad @sudhakarchinoor @patilShruthi @GPeterThomas
