@@ -54,7 +54,7 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
 
   await page.getByRole('link', { name: 'Sign out' }).click();
   
-  await expect(page.locator('h1')).toContainText('You have been signed out');
+  await verifyheading('You have been signed out');
 
  async function verifyheading(expectedText: string) {
     await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 10000 });
