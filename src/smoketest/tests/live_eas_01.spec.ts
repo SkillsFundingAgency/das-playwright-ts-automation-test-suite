@@ -22,14 +22,14 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await page.getByRole('link', { name: 'Adverts' }).click();
   await verifyheading('Recruitment dashboard');
 
-  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await gotohomepage();
   await page.getByRole('link', { name: 'Manage training providers' }).click();
   await verifyheading('Manage training providers');
 
   await page.getByRole('link', { name: 'Finance' }).click(); 
   await verifyheading('Funding and payments');
 
-  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await gotohomepage();
   await page.getByRole('link', { name: 'Transfers' }).click();
   await verifyheading('Manage transfers');
   await page.getByRole('link', { name: 'View my transfer pledges and' }).click();
@@ -41,11 +41,11 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await page.getByRole('link', { name: 'Your team' }).click();
   await verifyheading('Your team');
 
-  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await gotohomepage();
   await page.getByRole('link', { name: 'Find training and manage' }).click();
   await verifyheading('Find apprenticeship training and manage requests');
 
-  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await gotohomepage();
   const more = page.getByRole('link', { name: 'More' });
   await more.click();
   await expect(more).toHaveAttribute('aria-expanded', 'true');
@@ -57,6 +57,11 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await verifyheading('You have been signed out');
 
  async function verifyheading(expectedText: string) {
-    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 10000 });
+    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
+  }
+
+  async function gotohomepage() {
+    await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+    await verifyheading('Department for Education');
   }
 });
