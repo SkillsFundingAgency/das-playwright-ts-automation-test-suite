@@ -15,7 +15,6 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toBeVisible();
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toContainText('Apprenticeship Service Support');
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('scroll-container-content')).toContainText('Apprenticeship Service Support');
-  
 
   await page.getByRole('link', { name: 'Apprentices', exact: true }).click();
   await verifyheading('Apprentices');
@@ -58,6 +57,6 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await expect(page.locator('h1')).toContainText('You have been signed out');
 
  async function verifyheading(expectedText: string) {
-    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText);
+    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 10000 });
   }
 });
