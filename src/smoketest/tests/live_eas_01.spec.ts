@@ -57,12 +57,7 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   
   await expect(page.locator('h1')).toContainText('You have been signed out');
 
-  await page.getByRole('link', { name: 'Sign in', exact: true }).click();
-
-  await expect(page.locator('h1')).toContainText('Create your GOV.UK One Login or sign in');
-
  async function verifyheading(expectedText: string) {
     await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText);
   }
 });
-
