@@ -1,28 +1,57 @@
 import { test, expect} from '../fixtures/basefixture';
 
 test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login, page }) => {
- 
-  await page.getByRole('link', { name: 'Finance' }).click();
+
+  const acceptallCookiesButton = page.getByRole('button', { name: 'Accept all cookies' });
+
+  await page.addLocatorHandler(acceptallCookiesButton, async () => {
+    await acceptallCookiesButton.click();
+  });
+
+  await expect(page.getByRole('link', { name: 'GOV.UK One Login' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'GOV.UK', exact: true })).toBeVisible();
+
+  await page.locator('iframe[title="Opens a widget where you can find more information"]').contentFrame().getByTestId('launcher').click();
+  await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toBeVisible();
+  await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toContainText('Apprenticeship Service Support');
+  await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('scroll-container-content')).toContainText('Apprenticeship Service Support');
   
-  await expect(page.locator('h1')).toContainText('Funding and payments');
+
+  await page.getByRole('link', { name: 'Apprentices', exact: true }).click();
+  await verifyheading('Apprentices');
 
   await page.getByRole('link', { name: 'Adverts' }).click();
-  await expect(page.locator('h1')).toContainText('Recruitment dashboard');
+  await verifyheading('Recruitment dashboard');
 
-  await page.getByRole('link', { name: 'Apprentices' }).click();
-  await expect(page.locator('h1')).toContainText('Apprentices');
+  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await page.getByRole('link', { name: 'Manage training providers' }).click();
+  await verifyheading('Manage training providers');
 
-  await page.getByRole('link', { name: 'Your team' }).click();
-  await expect(page.locator('h1')).toContainText('Your team');
+  await page.getByRole('link', { name: 'Finance' }).click(); 
+  await verifyheading('Funding and payments');
+
+  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await page.getByRole('link', { name: 'Transfers' }).click();
+  await verifyheading('Manage transfers');
+  await page.getByRole('link', { name: 'View my transfer pledges and' }).click();
+  await expect(page.locator('h1.govuk-heading-xl')).toContainText('My transfer pledges');
 
   await page.getByRole('link', { name: 'Your organisations and' }).click();
-  await expect(page.locator('h1')).toContainText('Your organisations and agreements');
+  await verifyheading('Your organisations and');
 
-  await page.getByRole('link', { name: 'More' }).click();
-  const payeLink = page.locator('a:has-text("PAYE")');
-  await payeLink.first().waitFor({ state: 'visible', timeout: 5000 });
-  await payeLink.first().click();
-  await expect(page.locator('h1')).toContainText('PAYE schemes');
+  await page.getByRole('link', { name: 'Your team' }).click();
+  await verifyheading('Your team');
+
+  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  await page.getByRole('link', { name: 'Find training and manage' }).click();
+  await verifyheading('Find apprenticeship training and manage requests');
+
+  await page.getByLabel('Service information').getByRole('link', { name: 'Home' }).click();
+  const more = page.getByRole('link', { name: 'More' });
+  await more.click();
+  await expect(more).toHaveAttribute('aria-expanded', 'true');
+  await page.getByRole('link', { name: 'PAYE schemes' }).last().click();
+  await verifyheading('PAYE schemes');
 
   await page.getByRole('link', { name: 'Sign out' }).click();
   
@@ -31,4 +60,9 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await page.getByRole('link', { name: 'Sign in', exact: true }).click();
 
   await expect(page.locator('h1')).toContainText('Create your GOV.UK One Login or sign in');
+
+ async function verifyheading(expectedText: string) {
+    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText);
+  }
 });
+

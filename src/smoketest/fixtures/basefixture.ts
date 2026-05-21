@@ -46,7 +46,7 @@ export const test = base.extend<EmpAccountLoginFixtures>({
       await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
       await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
       await page.getByRole('button', { name: 'Continue' }).click();
-      await expect(page.locator('h1')).toContainText('Department for Education');
+      await expect(page.getByRole('heading', { name: 'Department for Education' })).toBeVisible();
 
       await use();
     });
