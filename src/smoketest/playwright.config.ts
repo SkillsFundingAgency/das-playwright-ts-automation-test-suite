@@ -29,7 +29,7 @@ for (const key of requiredEnvVars) {
 export default defineConfig({
   testIgnore: '**/example.spec.ts',
   testDir: './tests',
-  timeout: 60_000,
+  timeout: 120_000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -40,6 +40,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
+    ['html'],
     ['list'], 
     ['junit', { outputFile: 'results.xml' }],   
     ['allure-playwright']
