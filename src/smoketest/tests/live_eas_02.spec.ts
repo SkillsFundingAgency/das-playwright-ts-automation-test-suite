@@ -18,20 +18,20 @@ const verifyNavigation = async (
   page: Page,
   linkName: string,
   expectedUrlPattern: RegExp,
-  expectedHeadingText: string
+  expectedHeadingText: RegExp | string
 ) => {
   await clickLink(page, linkName);
   await verifyPage(page, expectedUrlPattern, expectedHeadingText);
   await page.goBack();
   await expect(page).toHaveURL(/apprentices/i);
-  await verifyPage(page, /apprentices/i, 'Apprentices');
+  await verifyPage(page, /apprentices/i, 'Learners');
 };
 
 test('Live_EAS_02_ApprovalsNavigation', { tag: ['@livesmoketest'] }, async ({ Login, page }) => {
   await clickLink(page, 'Apprentices');
-  await verifyPage(page, /apprentices/i, 'Apprentices');
+  await verifyPage(page, /apprentices/i, 'Learners');
 
-  await verifyNavigation(page, 'Add an apprentice', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Add an apprentice');
-  await verifyNavigation(page, 'Apprentice requests', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Apprentice requests');
-  await verifyNavigation(page, 'Manage your apprentices', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, /Manage your (apprentices|learners)/i);
+  await verifyNavigation(page, 'Add a Learner or send a learner request', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Add a learner or send a learner request');
+  await verifyNavigation(page, 'Review learner requests', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Apprentice requests');
+  await verifyNavigation(page, 'Manage your learners', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Manage your learners');
 });
