@@ -1,11 +1,7 @@
-import {test, expect} from '@playwright/test';
+import { faaTest, expect} from '../fixtures/basefixture';
 
-test('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ page }) => {
+faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Login, page }) => {
 
-    const acceptallCookiesButton = page.getByRole('button', { name: 'Accept additional cookies' });
-
-    await page.goto('https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch');
-    await acceptallCookiesButton.click();
     await verifyheading('Search apprenticeships');
     await expect(page.getByRole('textbox', { name: 'What' })).toBeVisible();
     await expect(page.getByRole('combobox', { name: 'Where' })).toBeVisible();
@@ -33,9 +29,16 @@ test('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ page })
     await firstVacancyTitle.click();
     await verifyheading(vacancyTitleText?.trim() || '');
 
-    await page.getByRole('button', { name: 'Sign in or create an account' }).click();
-    await verifyheading('Create your GOV.UK One Login or sign in');
-
+    
+    const applyButton = page.locator('a.govuk-button');
+    
+    if (vacancyTitleText?.includes('(from NHS Jobs)')) {
+      await expect(applyButton).toHaveText('Continue to NHS Jobs');
+    } else if (vacancyTitleText?.includes('(from Civil Service Jobs)')) {
+      await expect(applyButton).toHaveText('Continue to Civil Service Jobs');
+    } else {
+      await expect(applyButton).toHaveText(/Go to application website|Apply for apprenticeship/);
+    }
 
     async function verifyheading(expectedText: string) {
     await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
