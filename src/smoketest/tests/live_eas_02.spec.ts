@@ -32,6 +32,6 @@ test('Live_EAS_02_ApprovalsNavigation', { tag: ['@livesmoketest'] }, async ({ Lo
   await verifyPage(page, /apprentices/i, 'Learners');
 
   await verifyNavigation(page, 'Add a Learner or send a learner request', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Add a learner or send a learner request');
-  await verifyNavigation(page, 'Review learner requests', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Apprentice requests');
+  await verifyNavigation(page, 'Review learner requests', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Learner requests');
   await verifyNavigation(page, 'Manage your learners', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Manage your learners');
 });
