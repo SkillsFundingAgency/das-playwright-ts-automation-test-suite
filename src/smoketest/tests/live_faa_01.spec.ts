@@ -31,7 +31,7 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
 
     
     const applyButtonCsjNhs = page.locator('a.govuk-button');
-    const applyButton = page.locator('.faa-vacancy-content .govuk-button');
+    const applyButton = page.locator('.faa-vacancy-content a.govuk-button');
     
     if (vacancyTitleText?.includes('(from NHS Jobs)')) {
       await expect(applyButtonCsjNhs).toHaveText('Continue to NHS Jobs');
