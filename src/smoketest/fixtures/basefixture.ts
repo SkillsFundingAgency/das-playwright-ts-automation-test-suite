@@ -25,33 +25,66 @@ export const test = base.extend<EmpAccountLoginFixtures>({
 
       await page.getByRole('button', { name: 'Accept additional cookies' }).click();
       await page.getByRole('button', { name: 'Sign in' }).click();
-      await page.getByRole('button', { name: 'Sign in' }).click();
-
-      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
-      await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
-      await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
+      await performSignIn(page)
       
-      await secureFill(page, '#email', '__email');
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
-      await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
-      await secureFill(page, '#password', '__password');
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
-      await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
-
-      const mfaCode = await getMfaCode();
-      await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
-      await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
-      await page.getByRole('button', { name: 'Continue' }).click();
       await expect(page.getByRole('heading', { name: 'Department for Education' })).toBeVisible();
 
       await use();
     });
   },
 });
+
+export const faaTest = base.extend<EmpAccountLoginFixtures>({
+  // This fixture navigaes to the page, Login and provides the entry point to the application
+        Login: async ({ page }, use) => {
+    console.log(`Running ${test.info().title}`);
+
+    const auth = JSON.parse(process.env.LiveEasUser!);
+
+    await injectSecret(page.context(), '__email', auth.Username);
+
+    await injectSecret(page.context(), '__password', auth.Password);
+
+    await test.step('Login to the faa application', async () => {
+
+      await page.goto('https://www.findapprenticeship.service.gov.uk');
+      await expect(page.getByRole('button', { name: 'Accept additional cookies' })).toBeVisible();
+
+      await page.getByRole('button', { name: 'Accept additional cookies' }).click();
+      await page.getByRole('link', { name: 'Sign in or create an account' }).click();
+      await performSignIn(page)
+      
+      await expect(page.getByRole('heading', { name: 'Search apprenticeships' })).toBeVisible();
+
+      await use();
+    });
+  },
+});
+
+export async function performSignIn(page: Page) {
+
+  await page.getByRole('button', { name: 'Sign in' }).click();
+
+  await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk(\/|\/enter-email)?/);
+  await expect(page.getByRole('textbox', { name: 'Enter your email address to' })).toBeVisible();
+  await page.getByRole('textbox', { name: 'Enter your email address to' }).click();
+      
+  await secureFill(page, '#email', '__email');
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-password/);
+  await expect(page.getByRole('textbox', { name: 'Enter your password' })).toBeVisible();
+  await secureFill(page, '#password', '__password');
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  await expect(page).toHaveURL(/https:\/\/signin\.account\.gov\.uk\/enter-authenticator-app-code/);
+  await expect(page.getByRole('textbox', { name: 'Enter the 6 digit security' })).toBeVisible();
+
+  const mfaCode = await getMfaCode();
+  await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
+  await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
+  await page.getByRole('button', { name: 'Continue' }).click();  
+}
 
 
 export async function injectSecret(context: BrowserContext, key: string, value: string) {
