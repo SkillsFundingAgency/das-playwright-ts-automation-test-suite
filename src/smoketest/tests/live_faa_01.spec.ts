@@ -30,12 +30,13 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     await verifyheading(vacancyTitleText?.trim() || '');
 
     
-    const applyButton = page.locator('a.govuk-button');
+    const applyButtonCsjNhs = page.locator('a.govuk-button');
+    const applyButton = page.locator('.faa-vacancy-content .govuk-button');
     
     if (vacancyTitleText?.includes('(from NHS Jobs)')) {
-      await expect(applyButton).toHaveText('Continue to NHS Jobs');
+      await expect(applyButtonCsjNhs).toHaveText('Continue to NHS Jobs');
     } else if (vacancyTitleText?.includes('(from Civil Service Jobs)')) {
-      await expect(applyButton).toHaveText('Continue to Civil Service Jobs');
+      await expect(applyButtonCsjNhs).toHaveText('Continue to Civil Service Jobs');
     } else {
       await expect(applyButton).toHaveText(/Go to application website|Apply for apprenticeship/);
     }
