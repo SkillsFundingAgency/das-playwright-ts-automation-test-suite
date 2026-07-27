@@ -64,17 +64,31 @@ export default defineConfig({
   projects: [
     {
       name: 'Google Chrome',
+      grepInvert: /@visualtest/,
       use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'Safari',
+      grepInvert: /@visualtest/,
       use: { ...devices['Desktop Safari'] },
     },
     {
       name: 'Microsoft Edge',
+      grepInvert: /@visualtest/,
       use: { ...devices['Desktop Edge'] },
     },
+    {
+      name: 'Visual Test in Chrome',
+      grep: /@visualtest/,
+      use: { ...devices['Desktop Chrome'] },
+    }
   ],
+
+expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05,
+    },
+  },
 
   /* Run your local dev server before starting the tests */
   // webServer: {
