@@ -350,3 +350,8 @@ MigrationBackup/
 .ionide/
 **/*.env.smoketest
 src/smoketest/results.xml
+src/smoketest/.github/agents/
+src/smoketest/.github/workflows/
+src/smoketest/.vscode/mcp.json
+src/smoketest/specs/
+src/smoketest/.playwright-mcp/
