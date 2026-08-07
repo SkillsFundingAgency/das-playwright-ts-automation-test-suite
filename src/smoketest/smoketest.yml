@@ -2,7 +2,7 @@ trigger: none
 pr: none
 
 parameters:
-- name: RuleName
+- name: tag
   type: string
   default: '@livesmoketest'
 
