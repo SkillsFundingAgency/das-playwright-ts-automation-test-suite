@@ -1,17 +1,16 @@
 trigger: none
 pr: none
 
+parameters:
+- name: tag
+type: string
+default: '@livesmoketest'
+
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   WORKING_DIRECTORY: 'src/smoketest'
-
-parameters:
-- name: tag
-displayName: Test Tag
-type: string
-default: '@livesmoketest'
 
 steps:
   - checkout: self
