@@ -9,7 +9,7 @@ async function dismissCookieBanner(page: Page) {
     await acceptButton.click();
   }
 }
-
+test.describe('Find employer schemes website', () => {
   test('landing page loads and key content is visible', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
@@ -99,4 +99,4 @@ async function dismissCookieBanner(page: Page) {
     await expect(page.getByRole('link', { name: /find out more about apprenticeships/i }))
       .toHaveAttribute('href', /\/schemes\/apprenticeships$/);
   });
-;
+});
