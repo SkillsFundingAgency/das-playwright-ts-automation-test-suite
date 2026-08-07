@@ -6,7 +6,7 @@ pool:
 
 variables:
   WORKING_DIRECTORY: 'src/smoketest'
-  tag: '@livesmoketest'
+  TAG: '@livesmoketest'
 
 steps:
   - checkout: self
