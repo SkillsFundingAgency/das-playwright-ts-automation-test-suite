@@ -2,9 +2,9 @@ trigger: none
 pr: none
 
 parameters:
-- name: tag
-type: string
-default: '@livesmoketest'
+- name: RuleName
+  type: string
+  default: '@livesmoketest'
 
 pool:
   vmImage: 'ubuntu-latest'
