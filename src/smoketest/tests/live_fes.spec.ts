@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test } from '../fixtures/basefixture';
+import { expect, type Page } from '@playwright/test';
 
 const baseURL = 'https://find-employer-schemes.education.gov.uk/';
 
@@ -9,7 +10,7 @@ async function dismissCookieBanner(page: Page) {
   }
 }
 
-  test('landing page loads and key content is visible [${browserName}]', { tag: ['@findempscheme'] }, async ({ page }) => {
+  test('landing page loads and key content is visible', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
