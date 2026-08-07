@@ -1,4 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
+import * as allure from 'allure-js-commons';
+test.beforeEach(async ({}, testInfo) => {
+await allure.parentSuite(testInfo.project.name);
+});
 
 const baseURL = 'https://find-employer-schemes.education.gov.uk/';
 
