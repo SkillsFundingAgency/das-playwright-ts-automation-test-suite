@@ -1,8 +1,4 @@
 import { test, expect, type Page } from '@playwright/test';
-import * as allure from 'allure-js-commons';
-test.beforeEach(async ({}, testInfo) => {
-await allure.parentSuite(testInfo.project.name);
-});
 
 const baseURL = 'https://find-employer-schemes.education.gov.uk/';
 
@@ -13,7 +9,7 @@ async function dismissCookieBanner(page: Page) {
   }
 }
 
-  test('landing page loads and key content is visible', { tag: ['@findempscheme'] }, async ({ page }) => {
+  test('landing page loads and key content is visible [${browserName}]', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
@@ -23,7 +19,7 @@ async function dismissCookieBanner(page: Page) {
     await expect(page.getByRole('link', { name: /get career ideas and browse your training options/i })).toBeVisible();
   });
 
-  test('user can navigate from the landing page to the schemes list', { tag: ['@findempscheme'] }, async ({ page }) => {
+  test('user can navigate from the landing page to the schemes list [${browserName}]', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
