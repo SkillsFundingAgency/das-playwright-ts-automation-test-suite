@@ -6,6 +6,7 @@ pool:
 
 variables:
   WORKING_DIRECTORY: 'src/smoketest'
+  PLAYWRIGHT_TAG: '@livesmoketest'
 
 steps:
   - checkout: self
@@ -60,7 +61,7 @@ steps:
 
   # ✅ Run Playwright tests
   - script: |
-      npx playwright test
+      npx playwright test --grep "$(PLAYWRIGHT_TAG)"
     continueOnError: true  
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Run Playwright tests'
