@@ -56,7 +56,7 @@ function assertReachable(response: Awaited<ReturnType<import('@playwright/test')
   expect(status !== undefined && status >= 200 && status < 400, `Expected ${link} to be reachable, received ${status ?? 'no response'}`).toBeTruthy();
 }
 test.describe('Find employer schemes link validation', () => {
-  test('validates links on the homepage, schemes page and key subpages', { tag: ['@findempscheme'] }, async ({ page }) => {
+  test('validates links on the homepage, schemes page and key subpages', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
     await openPage(page, '/');
 
     const homeLinks = await collectLinks(page);
