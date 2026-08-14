@@ -1,8 +1,5 @@
 trigger: none
 pr: none
-schedules:
- - cron: '0 1 * * 1-5'
-   displayName: ScheduledRun
 
 pool:
   vmImage: 'ubuntu-latest'
