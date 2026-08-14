@@ -1,8 +1,8 @@
 trigger: none
 pr: none
 schedules:
-- cron: '0 1 * * 1-5'
-  displayName: ScheduledRun
+ - cron: '0 1 * * 1-5'
+   displayName: ScheduledRun
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -40,12 +40,12 @@ steps:
       echo "Working directory contents:"
       ls -la $(WORKING_DIRECTORY)
     displayName: 'Debug: Working directory file list'
-
-  # ✅ Update npm 
-  - script: |
-      npm install -g npm@latest
-      npm --version
-    displayName: 'Upgrade npm'
+# 
+  # # ✅ Update npm 
+  # - script: |
+  #     npm install -g npm@latest
+  #     npm --version
+  #   displayName: 'Upgrade npm'
 
   # ✅ Install dependencies
   - script: |
