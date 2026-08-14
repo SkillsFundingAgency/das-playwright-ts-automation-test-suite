@@ -10,7 +10,7 @@ async function dismissCookieBanner(page: Page) {
   }
 }
 test.describe('Find employer schemes website', () => {
-  test('landing page loads and key content is visible', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
+  test('landing page loads and key content is visible', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
@@ -20,7 +20,7 @@ test.describe('Find employer schemes website', () => {
     await expect(page.getByRole('link', { name: /get career ideas and browse your training options/i })).toBeVisible();
   });
 
-  test('user can navigate from the landing page to the schemes list', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
+  test('user can navigate from the landing page to the schemes list', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
@@ -31,7 +31,7 @@ test.describe('Find employer schemes website', () => {
     await expect(page.getByRole('heading', { name: /filters/i })).toBeVisible();
   });
 
-  test('user can filter schemes by intent, duration and cost', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
+  test('user can filter schemes by intent, duration and cost', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(`${baseURL}/schemes/`);
     await dismissCookieBanner(page);
 
@@ -59,7 +59,7 @@ test.describe('Find employer schemes website', () => {
     await expect(page.locator('body')).toContainText('Number of schemes:');
   });
 
-  test('user can sort the schemes list', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
+  test('user can sort the schemes list', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(`${baseURL}/schemes/`);
     await dismissCookieBanner(page);
 
@@ -71,7 +71,7 @@ test.describe('Find employer schemes website', () => {
     }).not.toBe(initialFirstScheme);
   });
 
-  test('user can open a scheme detail page from the results list', { tag: ['@livesmoketest', '@findempscheme'] }, async ({ page }) => {
+  test('user can open a scheme detail page from the results list', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(`${baseURL}/schemes/`);
     await dismissCookieBanner(page);
 
@@ -82,7 +82,7 @@ test.describe('Find employer schemes website', () => {
     await expect(page.locator('main')).toBeVisible();
   });
 
-  test('supporting links are present and point to expected destinations', { tag: ['@livesmoketest','@findempscheme'] }, async ({ page }) => {
+  test('supporting links are present and point to expected destinations', { tag: ['@findempscheme'] }, async ({ page }) => {
     await page.goto(baseURL);
     await dismissCookieBanner(page);
 
