@@ -60,7 +60,7 @@ steps:
 
   # ✅ Run Playwright tests
   - script: |
-      npx playwright test
+      npx playwright test --grep "$(TAG)"
     continueOnError: true  
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Run Playwright tests'

@@ -1,5 +1,6 @@
 import { test as base, expect, BrowserContext, Page } from '@playwright/test';
 import Mailosaur, { OtpResult } from 'mailosaur';
+import * as allure from 'allure-js-commons';
 
 // Define the types for our custom fixtures
 type EmpAccountLoginFixtures = {
@@ -123,5 +124,9 @@ export async function getMfaCode(): Promise<string> {
 
   return otp.code; // always a valid 6‑digit TOTP
 }
+
+test.beforeEach(async ({}, testInfo) => {
+await allure.parentSuite(testInfo.project.name);
+});
 
 export { expect } from '@playwright/test';
