@@ -9,7 +9,7 @@ const clickLink = async (page: Page, linkName: string) => {
 
 const verifyPage = async (page: Page, expectedUrlPattern: RegExp, expectedHeadingText: RegExp | string) => {
   await expect(page).toHaveURL(expectedUrlPattern);
-  const heading = page.locator('h1');
+  const heading = page.locator('h1.govuk-heading-xl, h1.govuk-heading-l');
   await expect(heading).toBeVisible({ timeout: 10000 });
   await expect(heading).toContainText(expectedHeadingText);
 };
@@ -28,7 +28,7 @@ const verifyNavigation = async (
 };
 
 test('Live_EAS_02_ApprovalsNavigation', { tag: ['@livesmoketest'] }, async ({ Login, page }) => {
-  await clickLink(page, 'Apprentices');
+  await clickLink(page, 'Learners');
   await verifyPage(page, /apprentices/i, 'Learners');
 
   await verifyNavigation(page, 'Add a Learner or send a learner request', /approvals\.manage-apprenticeships\.service\.gov\.uk/i, 'Add a learner or send a learner request');
