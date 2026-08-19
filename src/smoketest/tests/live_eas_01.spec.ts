@@ -15,8 +15,9 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toBeVisible();
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('widget-title')).toContainText('Apprenticeship Service Support');
   await expect(page.locator('iframe[title="Find more information here"]').contentFrame().getByTestId('scroll-container-content')).toContainText('Apprenticeship Service Support');
+  await page.locator('iframe[title="Find more information here"]').contentFrame().getByRole('button', { name: 'Minimize widget' }).click();
 
-  await page.getByRole('link', { name: 'Apprentices', exact: true }).click();
+  await page.getByLabel('Service information').getByRole('link', { name: 'Learners', exact: true }).click();
   await verifyheading('Learners');
 
   await page.getByRole('link', { name: 'Adverts' }).click();

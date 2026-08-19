@@ -30,7 +30,9 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     await verifyheading(vacancyTitleText?.trim() || '');
 
     
-    const applyButton = page.locator('a.govuk-button');
+    const applyButton = page
+      .getByRole('link', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ })
+      .or(page.getByRole('button', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ }));
     
     if (vacancyTitleText?.includes('(from NHS Jobs)')) {
       await expect(applyButton).toHaveText('Continue to NHS Jobs');
