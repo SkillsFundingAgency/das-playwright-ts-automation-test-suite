@@ -69,6 +69,18 @@ steps:
       LiveEasUser: $(LiveEasUser)
       MailasourDeviceConfig: $(MailasourDeviceConfig)
 
+  # ✅ Display Agent Folder Structure
+  - task: Bash@3
+    displayName: 'Agent Folder Structure'
+    condition: always()
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        echo "*************************************************"
+        echo "Tree Structure of $(WORKING_DIRECTORY):"
+        tree "$(WORKING_DIRECTORY)" || true
+
   # ✅ Publish Allure report
   - task: PublishAllureReport@2
     displayName: 'Allure Tab: Generate and Publish Allure Report'
