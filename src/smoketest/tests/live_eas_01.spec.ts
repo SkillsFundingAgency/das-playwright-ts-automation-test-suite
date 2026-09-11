@@ -1,6 +1,6 @@
 import { test, expect} from '../fixtures/basefixture';
 
-test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login, page }) => {
+test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest', '@emphomepagenav']}, async ({ Login, page }) => {
 
   const acceptallCookiesButton = page.getByRole('button', { name: 'Accept all cookies' });
 
@@ -45,7 +45,23 @@ test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest']}, async ({ Login
   await gotohomepage();
   await page.getByRole('link', { name: 'Find training and manage' }).click();
   await verifyheading('Find apprenticeship training and manage requests');
+  
+  await gotohomepage();
+  await page.getByRole('link', { name: 'Funding and payments' }).click();
+  await verifyheading('Funding and payments');
 
+  await gotohomepage();
+  await page.getByRole('link', { name: 'Recruitment board' }).click();
+  await verifyheading('Recruitment dashboard');
+
+  await gotohomepage();
+  await page.getByRole('link', { name: 'Feedback on training providers' }).click();
+  await verifyheading('You have no training providers');
+
+  await gotohomepage();
+  await page.getByRole('link', { name: 'Join the Apprentice' }).click();
+  await verifyheading('Join the Apprentice Ambassador Network as an employer');
+  
   await gotohomepage();
   const more = page.getByRole('link', { name: 'More' });
   await more.click();
