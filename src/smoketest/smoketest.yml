@@ -86,6 +86,7 @@ steps:
     displayName: 'Allure Tab: Generate and Publish Allure Report'
     condition: always()
     inputs:
+      allureVersion: '3.16.1'
       testResultsDir: '$(WORKING_DIRECTORY)/allure-results'
 
   # ✅ Publish JUnit Test Results to Azure DevOps UI
