@@ -1,0 +1,44 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "playwright",
+        "test",
+        "--headed",
+        "--project=Google Chrome",
+        "--grep=@emphomepagenav"
+      ],
+      "cwd": "${workspaceFolder}/src/smoketest",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Playwright UI",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "playwright",
+        "test",
+        "--ui",
+        "--project=Google Chrome",
+        // "--grep=@emphomepagenav",
+        // "tests/live_eas_01.spec.ts"
+      ],
+      "cwd": "${workspaceFolder}/src/smoketest",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+  ]
+}
