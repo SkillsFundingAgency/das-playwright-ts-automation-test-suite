@@ -54,6 +54,8 @@ faaTest('Live_FAA_01_Vacancies search', { tag: ['@livesmoketest'] }, async ({ Lo
   }
 
   async function verifyheading1(expectedText: string, target: typeof page = page) {
-    await expect(target.locator('#heading')).toContainText(expectedText, { timeout: 60000 });
+    // Vacancy titles include a screen-reader-only "(opens in new tab)" suffix not present in the page heading.
+    const heading = expectedText.replace(/\s*\(opens in new tab\)\s*$/i, '');
+    await expect(target.locator('#heading')).toContainText(heading, { timeout: 60000 });
   }
 })
