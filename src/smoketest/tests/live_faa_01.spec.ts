@@ -26,7 +26,7 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     const firstVacancyTitle = page.locator('li.das-search-results__list-item').first().locator('[id$="vacancy-title"]');
     const vacancyTitleText = await firstVacancyTitle.textContent();
 
-    await firstVacancyTitle.click();
+    await firstVacancyTitle.locator('a.das-search-results__link').click();
     await verifyheading(vacancyTitleText?.trim() || '');
 
     
