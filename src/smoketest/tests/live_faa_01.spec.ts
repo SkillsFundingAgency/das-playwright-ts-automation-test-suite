@@ -27,13 +27,19 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     const name = firstVacancy.locator('[id$="vacancy-title"]');
     const vacancyTitleText = await name.textContent();
 
-    await firstVacancy.locator('a.das-search-results__link').click();
-    await verifyheading(vacancyTitleText?.trim() || '');
+    // The vacancy link may open in a new tab, so track any popup that appears.
+    const [popup] = await Promise.all([
+      page.waitForEvent('popup', { timeout: 5000 }).catch(() => null),
+      firstVacancy.locator('a.das-search-results__link').click(),
+    ]);
+    const vacancyPage = popup ?? page;
+    await vacancyPage.waitForLoadState();
+    await verifyheading(vacancyTitleText?.trim() || '', vacancyPage);
 
     
-    const applyButton = page
+    const applyButton = vacancyPage
       .getByRole('link', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ })
-      .or(page.getByRole('button', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ }));
+      .or(vacancyPage.getByRole('button', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ }));
     
     if (vacancyTitleText?.includes('(from NHS Jobs)')) {
       await expect(applyButton).toHaveText('Continue to NHS Jobs');
@@ -43,7 +49,7 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
       await expect(applyButton).toHaveText(/Go to application website|Apply for apprenticeship/);
     }
 
-    async function verifyheading(expectedText: string) {
-    await expect(page.locator('main h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
+    async function verifyheading(expectedText: string, target: typeof page = page) {
+    await expect(target.locator('main h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
   }
 })
