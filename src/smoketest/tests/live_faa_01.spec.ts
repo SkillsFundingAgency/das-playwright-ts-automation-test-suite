@@ -23,10 +23,11 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     await expect(page.locator('.faa-filter__selected-action', { hasText: 'Clear filters' })).toBeVisible();
 
 
-    const firstVacancyTitle = page.locator('li.das-search-results__list-item').first().locator('[id$="vacancy-title"]');
-    const vacancyTitleText = await firstVacancyTitle.textContent();
+    const firstVacancy = page.locator('li.das-search-results__list-item').first()
+    const name = firstVacancy.locator('[id$="vacancy-title"]');
+    const vacancyTitleText = await name.textContent();
 
-    await firstVacancyTitle.locator('a.das-search-results__link').click();
+    await firstVacancy.locator('a.das-search-results__link').click();
     await verifyheading(vacancyTitleText?.trim() || '');
 
     
