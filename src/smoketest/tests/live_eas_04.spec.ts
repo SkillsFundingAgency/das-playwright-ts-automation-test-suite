@@ -1,6 +1,6 @@
 import { test, expect} from '../fixtures/basefixture';
 
-test('Live_EAS_04_ManageTransfers', { tag:['@livesmoketest', '@emphomepagenav']}, async ({
+test('Live_EAS_04_ManageTransfers', { tag:[]}, async ({
   Login, // remove this if we wanana run loaccly on test env and enable employerPortal.login
   employerPortal, 
   homePage,
