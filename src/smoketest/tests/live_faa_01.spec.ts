@@ -1,55 +1,59 @@
-import { faaTest, expect} from '../fixtures/basefixture';
+import { faaTest, expect } from '../fixtures/basefixture';
 
-faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Login, page }) => {
+faaTest('Live_FAA_01_Vacancies search', { tag: ['@livesmoketest'] }, async ({ Login, page }) => {
 
-    await verifyheading('Search apprenticeships');
-    await expect(page.getByRole('textbox', { name: 'What' })).toBeVisible();
-    await expect(page.getByRole('combobox', { name: 'Where' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Search' })).toBeVisible();
+  await verifyheading('Search apprenticeships');
+  await expect(page.getByRole('textbox', { name: 'What' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Where' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Search' })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Search' }).click();
-    await verifyheading('results found');
-    await expect(page.locator('.govuk-pagination__list')).toBeVisible();
+  await page.getByRole('button', { name: 'Search' }).click();
+  await verifyheading('results found');
+  await expect(page.locator('.govuk-pagination__list')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Apprenticeship type , Show' }).click();
-    await page.getByRole('checkbox', { name: 'Apprenticeship', exact: true }).check();
-    await page.getByRole('checkbox', { name: 'Hide companies recruiting' }).check();
-    await page.getByRole('button', { name: 'Apply filters' }).first().click();
-    await expect(page.locator('.faa-filter__selected-heading')).toContainText('Active filters');
-    const activeFilters = page.locator('.faa-filter__selected .faa-filter__tag');
-    await expect(activeFilters).toHaveCount(2);
-    await expect(page.locator('.faa-filter__tag', { hasText: 'Hide companies recruiting nationally' })).toBeVisible();
-    await expect(page.locator('.faa-filter__tag', { hasText: 'Apprenticeship' })).toBeVisible();
-    await expect(page.locator('.faa-filter__selected-action', { hasText: 'Clear filters' })).toBeVisible();
+  await page.getByRole('button', { name: 'Apprenticeship type , Show' }).click();
+  await page.getByRole('checkbox', { name: 'Apprenticeship', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Hide companies recruiting' }).check();
+  await page.getByRole('button', { name: 'Apply filters' }).first().click();
+  await expect(page.locator('.faa-filter__selected-heading')).toContainText('Active filters');
+  const activeFilters = page.locator('.faa-filter__selected .faa-filter__tag');
+  await expect(activeFilters).toHaveCount(2);
+  await expect(page.locator('.faa-filter__tag', { hasText: 'Hide companies recruiting nationally' })).toBeVisible();
+  await expect(page.locator('.faa-filter__tag', { hasText: 'Apprenticeship' })).toBeVisible();
+  await expect(page.locator('.faa-filter__selected-action', { hasText: 'Clear filters' })).toBeVisible();
 
 
-    const firstVacancy = page.locator('li.das-search-results__list-item').first()
-    const name = firstVacancy.locator('[id$="vacancy-title"]');
-    const vacancyTitleText = await name.textContent();
+  const firstVacancy = page.locator('li.das-search-results__list-item').first()
+  const name = firstVacancy.locator('[id$="vacancy-title"]');
+  const vacancyTitleText = await name.textContent();
 
-    // The vacancy link may open in a new tab, so track any popup that appears.
-    const [popup] = await Promise.all([
-      page.waitForEvent('popup', { timeout: 5000 }).catch(() => null),
-      firstVacancy.locator('a.das-search-results__link').click(),
-    ]);
-    const vacancyPage = popup ?? page;
-    await vacancyPage.waitForLoadState();
-    await verifyheading(vacancyTitleText?.trim() || '', vacancyPage);
+  // The vacancy link may open in a new tab, so track any popup that appears.
+  const [popup] = await Promise.all([
+    page.waitForEvent('popup', { timeout: 5000 }).catch(() => null),
+    firstVacancy.locator('a.das-search-results__link').click(),
+  ]);
+  const vacancyPage = popup ?? page;
+  await vacancyPage.waitForLoadState();
+  await verifyheading1(vacancyTitleText?.trim() || '', vacancyPage);
 
-    
-    const applyButton = vacancyPage
-      .getByRole('link', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ })
-      .or(vacancyPage.getByRole('button', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ }));
-    
-    if (vacancyTitleText?.includes('(from NHS Jobs)')) {
-      await expect(applyButton).toHaveText('Continue to NHS Jobs');
-    } else if (vacancyTitleText?.includes('(from Civil Service Jobs)')) {
-      await expect(applyButton).toHaveText('Continue to Civil Service Jobs');
-    } else {
-      await expect(applyButton).toHaveText(/Go to application website|Apply for apprenticeship/);
-    }
 
-    async function verifyheading(expectedText: string, target: typeof page = page) {
+  const applyButton = vacancyPage
+    .getByRole('link', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ })
+    .or(vacancyPage.getByRole('button', { name: /Continue to NHS Jobs|Continue to Civil Service Jobs|Go to application website|Apply for apprenticeship/ }));
+
+  if (vacancyTitleText?.includes('(from NHS Jobs)')) {
+    await expect(applyButton).toHaveText('Continue to NHS Jobs');
+  } else if (vacancyTitleText?.includes('(from Civil Service Jobs)')) {
+    await expect(applyButton).toHaveText('Continue to Civil Service Jobs');
+  } else {
+    await expect(applyButton).toHaveText(/Go to application website|Apply for apprenticeship/);
+  }
+
+  async function verifyheading(expectedText: string, target: typeof page = page) {
     await expect(target.locator('main h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
+  }
+
+  async function verifyheading1(expectedText: string, target: typeof page = page) {
+    await expect(target.locator('#heading')).toContainText(expectedText, { timeout: 60000 });
   }
 })
