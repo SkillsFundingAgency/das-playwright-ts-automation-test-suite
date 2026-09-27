@@ -43,6 +43,6 @@ faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Logi
     }
 
     async function verifyheading(expectedText: string) {
-    await expect(page.locator('h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
+    await expect(page.locator('main h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
   }
 })
