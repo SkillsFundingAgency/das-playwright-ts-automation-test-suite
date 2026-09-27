@@ -28,7 +28,15 @@ export const test = commonFixtures.extend<EmpAccountLoginFixtures>({
       await page.getByRole('button', { name: 'Accept additional cookies' }).click();
       await page.getByRole('button', { name: 'Sign in' }).click();
       await performSignIn(page)
-      
+
+      const fasterSignInHeading = page.locator('h1.govuk-heading-l', {
+        hasText: 'Sign in faster with your face, fingerprint or passcode',
+      });
+
+      if (await fasterSignInHeading.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await page.locator('button[value="skip"]').click();
+      }
+
       await expect(page.getByRole('heading', { name: 'Department for Education' })).toBeVisible();
 
       await use();
