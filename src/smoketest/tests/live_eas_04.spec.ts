@@ -1,7 +1,7 @@
 import { test, expect} from '../fixtures/basefixture';
 
-test('Live_EAS_04_ManageTransfers', { tag:[]}, async ({
-  // Login, // remove this if we wanana run loaccly on test env and enable employerPortal.login
+test('Live_EAS_04_ManageTransfers', { tag:['@livesmoketest']}, async ({
+  Login, // remove this if we wanana run loaccly on test env and enable employerPortal.login
   employerPortal, 
   homePage,
   manageTransfersPage,
@@ -9,7 +9,7 @@ test('Live_EAS_04_ManageTransfers', { tag:[]}, async ({
   searchFundingOpportunitiesPage,
   transferFundingConfirmPage }) => {
 
-  await employerPortal.login(); // this is for logging into the employer portal if needed to debug in test env's , To enable this remove Login from params
+  // await employerPortal.login(); // this is for logging into the employer portal if needed to debug in test env's , To enable this remove Login from params
 
   // Expects here we are already logged in to employer portal from previous steps
 
