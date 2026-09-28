@@ -34,7 +34,9 @@ faaTest('Live_FAA_01_Vacancies search', { tag: ['@livesmoketest'] }, async ({ Lo
   ]);
   const vacancyPage = popup ?? page;
   await vacancyPage.waitForLoadState();
-  await verifyheading1(vacancyTitleText?.trim() || '', vacancyPage);
+  // Vacancy titles include a screen-reader-only "(opens in new tab)" suffix not present in the page heading.
+  const vacancyHeading = (vacancyTitleText?.trim() || '').replace(/\s*\(opens in new tab\)\s*$/i, '');
+  await verifyheading(vacancyHeading, vacancyPage);
 
 
   const applyButton = vacancyPage
@@ -50,12 +52,7 @@ faaTest('Live_FAA_01_Vacancies search', { tag: ['@livesmoketest'] }, async ({ Lo
   }
 
   async function verifyheading(expectedText: string, target: typeof page = page) {
-    await expect(target.locator('main h1.govuk-heading-xl, h1.govuk-heading-l')).toContainText(expectedText, { timeout: 60000 });
-  }
-
-  async function verifyheading1(expectedText: string, target: typeof page = page) {
-    // Vacancy titles include a screen-reader-only "(opens in new tab)" suffix not present in the page heading.
-    const heading = expectedText.replace(/\s*\(opens in new tab\)\s*$/i, '');
-    await expect(target.locator('#heading')).toContainText(heading, { timeout: 60000 });
+    const heading = target.locator('main h1.govuk-heading-xl, h1.govuk-heading-l, #heading');
+    await expect(heading).toContainText(expectedText, { timeout: 60000 });
   }
 })
