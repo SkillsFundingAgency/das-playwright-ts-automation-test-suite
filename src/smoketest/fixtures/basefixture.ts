@@ -1,13 +1,14 @@
 import { test as base, expect, BrowserContext, Page } from '@playwright/test';
 import Mailosaur, { OtpResult } from 'mailosaur';
 import * as allure from 'allure-js-commons';
+import { commonFixtures } from './page-fixture';
 
 // Define the types for our custom fixtures
 type EmpAccountLoginFixtures = {
 Login : void;
 };
 
-export const test = base.extend<EmpAccountLoginFixtures>({
+export const test = commonFixtures.extend<EmpAccountLoginFixtures>({
   // This fixture navigaes to the page, Login and provides the entry point to the application
         Login: async ({ page }, use) => {
     console.log(`Running ${test.info().title}`);
@@ -27,7 +28,15 @@ export const test = base.extend<EmpAccountLoginFixtures>({
       await page.getByRole('button', { name: 'Accept additional cookies' }).click();
       await page.getByRole('button', { name: 'Sign in' }).click();
       await performSignIn(page)
-      
+
+      const fasterSignInHeading = page.locator('h1.govuk-heading-l', {
+        hasText: 'Sign in faster with your face, fingerprint or passcode',
+      });
+
+      if (await fasterSignInHeading.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await page.locator('button[value="skip"]').click();
+      }
+
       await expect(page.getByRole('heading', { name: 'Department for Education' })).toBeVisible();
 
       await use();
