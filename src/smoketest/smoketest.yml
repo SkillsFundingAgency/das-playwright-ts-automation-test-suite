@@ -2,7 +2,7 @@ trigger: none
 pr: none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'DAS - Continuous Integration Agents'
 
 variables:
   WORKING_DIRECTORY: 'src/smoketest'
@@ -38,6 +38,12 @@ steps:
       ls -la $(WORKING_DIRECTORY)
     displayName: 'Debug: Working directory file list'
 
+  # ✅ Debug: Show agent's outbound IP (what the WAF sees)
+  - script: |
+      echo "Agent outbound IP:"
+      curl -s https://api.ipify.org || true
+    displayName: 'Debug: Agent outbound IP'
+
   # ✅ Update npm 
   - script: |
       npm install -g npm@latest
@@ -55,6 +61,7 @@ steps:
   # ✅ Install Playwright browsers and dependencies
   - script: |
       npx playwright install --with-deps
+      npx playwright install --with-deps msedge
     workingDirectory: $(WORKING_DIRECTORY)
     displayName: 'Install Playwright browsers'
 
