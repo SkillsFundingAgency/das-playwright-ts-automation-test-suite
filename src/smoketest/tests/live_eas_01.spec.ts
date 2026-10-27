@@ -1,6 +1,6 @@
 import { test, expect} from '../fixtures/basefixture';
 
-test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest', '@emphomepagenav']}, async ({ Login, page }) => {
+test('Live_EAS_01_HomePageNavigation', { tag:['@livesmoketest', '@approvalslivesmoketest']}, async ({ Login, page }) => {
 
   const acceptallCookiesButton = page.getByRole('button', { name: 'Accept all cookies' });
 

@@ -34,7 +34,7 @@ async function getShortlistCount(page: import('@playwright/test').Page) {
   return Number(count);
 }
 
-test('User searches for a course, filters results and shortlists a training provider', { tag: ['@livesmoketest', '@fatlivesmoketest'] }, async ({ page }) => {
+test('User searches for a course, filters results and shortlists a training provider', { tag: ['@fatlivesmoketest'] }, async ({ page }) => {
   await page.goto(`${baseUrl}/search`);
   await dismissCookieBanner(page);
 
