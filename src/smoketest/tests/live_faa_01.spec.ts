@@ -1,6 +1,6 @@
 import { faaTest, expect} from '../fixtures/basefixture';
 
-faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest']}, async ({ Login, page }) => {
+faaTest('Live_FAA_01_Vacancies search', { tag:['@livesmoketest', '@faalivesmoketest']}, async ({ Login, page }) => {
 
     await verifyheading('Search apprenticeships');
     await expect(page.getByRole('textbox', { name: 'What' })).toBeVisible();

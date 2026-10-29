@@ -27,7 +27,7 @@ const verifyNavigation = async (
   await verifyPage(page, /apprentices/i, 'Learners');
 };
 
-test('Live_EAS_02_ApprovalsNavigation', { tag: ['@livesmoketest'] }, async ({ Login, page }) => {
+test('Live_EAS_02_ApprovalsNavigation', { tag: ['@livesmoketest', '@approvalslivesmoketest'] }, async ({ Login, page }) => {
   await clickLink(page, 'Learners');
   await verifyPage(page, /apprentices/i, 'Learners');
 

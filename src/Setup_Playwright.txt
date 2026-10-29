@@ -1,0 +1,3 @@
+1. Setup Playwright MCP Agents
+npm install -D @playwright/test
+npx playwright install ($Env:NODE_TLS_REJECT_UNAUTHORIZED="0")
