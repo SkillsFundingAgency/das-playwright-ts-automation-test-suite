@@ -84,7 +84,15 @@ export async function performSignIn(page: Page) {
   const mfaCode = await getMfaCode();
   await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).click();
   await page.getByRole('textbox', { name: 'Enter the 6 digit security' }).fill(mfaCode);
-  await page.getByRole('button', { name: 'Continue' }).click();  
+  await page.getByRole('button', { name: 'Continue' }).click();
+  
+  const faceSignInHeading = page.locator('h1.govuk-heading-l', {
+        hasText: 'Sign in faster with your face, fingerprint or passcode',
+      });
+
+      if (await faceSignInHeading.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await page.locator('button[value="skip"]').click();
+      }
 }
 
 
